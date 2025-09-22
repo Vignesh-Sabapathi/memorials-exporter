@@ -32,24 +32,49 @@ jobs:
 
       - name: Prepare EB bundle
         run: |
+          set -euo pipefail
           rm -rf bundle && mkdir -p bundle/.ebextensions
+
           # pick the boot 'repackaged' jar deterministically
           JAR=$(ls target/*-SNAPSHOT.jar 2>/dev/null || ls target/*.jar | head -n 1)
           echo "Using JAR: $JAR"
           cp "$JAR" bundle/app.jar
-          cp Procfile bundle/Procfile
-          sed -i 's/\r$//' bundle/Procfile
-          # include EB health config
-          cp .ebextensions/00-health.config bundle/.ebextensions/00-health.config
 
-          # --- verification: jar must have Main-Class (Boot sets JarLauncher) ---
+          # --- Procfile: bind to the EB-provided port (usually 5000) ---
+          # This ensures Tomcat listens where Nginx expects it.
+          cat > bundle/Procfile <<'EOF'
+          web: java -Dserver.port=$PORT -jar app.jar
+          EOF
+
+          # normalize line endings just in case
+          sed -i 's/\r$//' bundle/Procfile
+
+          # include EB health config if present
+          [ -f .ebextensions/00-health.config ] && cp .ebextensions/00-health.config bundle/.ebextensions/00-health.config
+
+          # Fail if jar is not executable (no Main-Class)
           if ! unzip -p bundle/app.jar META-INF/MANIFEST.MF | grep -qi '^Main-Class:'; then
             echo "ERROR: app.jar is not executable (no Main-Class in MANIFEST)."
             unzip -p bundle/app.jar META-INF/MANIFEST.MF || true
             exit 1
           fi
 
+          # zip *contents* of bundle (so files are at the root of the zip)
           cd bundle && zip -r ../deploy.zip .
+
+      - name: Verify deploy.zip contents
+        run: |
+          set -euo pipefail
+          echo "---- Listing deploy.zip ----"
+          unzip -l deploy.zip | sed -n '1,200p'
+          
+          echo "---- Sanity checks ----"
+          # must be at the root (no leading bundle/)
+          unzip -l deploy.zip | awk '{print $4}' | grep -qx "Procfile" || { echo "ERROR: Procfile not at zip root"; exit 1; }
+          unzip -l deploy.zip | awk '{print $4}' | grep -qx "app.jar"   || { echo "ERROR: app.jar not at zip root"; exit 1; }
+          
+          echo "---- Procfile content ----"
+          unzip -p deploy.zip Procfile || { echo "ERROR: Cannot read Procfile from zip"; exit 1; }
 
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
