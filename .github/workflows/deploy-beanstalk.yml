@@ -33,11 +33,22 @@ jobs:
       - name: Prepare EB bundle
         run: |
           rm -rf bundle && mkdir -p bundle/.ebextensions
-          # pick a single jar deterministically
+          # pick the boot 'repackaged' jar deterministically
           JAR=$(ls target/*-SNAPSHOT.jar 2>/dev/null || ls target/*.jar | head -n 1)
+          echo "Using JAR: $JAR"
           cp "$JAR" bundle/app.jar
           cp Procfile bundle/Procfile
+          sed -i 's/\r$//' bundle/Procfile
+          # include EB health config
           cp .ebextensions/00-health.config bundle/.ebextensions/00-health.config
+
+          # --- verification: jar must have Main-Class (Boot sets JarLauncher) ---
+          if ! unzip -p bundle/app.jar META-INF/MANIFEST.MF | grep -qi '^Main-Class:'; then
+            echo "ERROR: app.jar is not executable (no Main-Class in MANIFEST)."
+            unzip -p bundle/app.jar META-INF/MANIFEST.MF || true
+            exit 1
+          fi
+
           cd bundle && zip -r ../deploy.zip .
 
       - name: Deploy to Elastic Beanstalk
