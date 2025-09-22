@@ -61,4 +61,5 @@ jobs:
           region: eu-west-2
           version_label: v-${{ github.run_number }}
           deployment_package: backend/deploy.zip   # path relative to repo root
+          use_existing_version_if_available: true
           wait_for_deployment: true
