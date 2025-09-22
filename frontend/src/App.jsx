@@ -1,33 +1,34 @@
-import React from 'react'
-import { Routes, Route, Link } from 'react-router-dom'
-import Home from './pages/Home'
-import Admin from './pages/Admin'
-import Product from './pages/Product'
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import NavBar from "./components/NavBar";
+import Footer from "./components/Footer";
+import Home from "./pages/Home";
+import Products from "./pages/Products";
+import Colors from "./pages/Colors";
+import FAQ from "./pages/FAQ";
+import Contact from "./pages/Contact";
+import GetSample from "./pages/GetSample";
+import Admin from "./pages/Admin";
+import NotFound from "./pages/NotFound";
+import About from "./pages/About";
 
 export default function App() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <header className="bg-white border-b">
-        <div className="max-w-6xl mx-auto p-4 flex items-center justify-between">
-          <Link to="/" className="text-xl font-bold">Memorials Exporter</Link>
-          <nav className="space-x-4">
-            <Link to="/" className="text-sm hover:underline">Home</Link>
-            <Link to="/admin" className="text-sm hover:underline">Admin</Link>
-          </nav>
-        </div>
-      </header>
-      <main className="flex-1">
+    <div className="app-root">
+      <NavBar />
+      <main className="container">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/product/:id" element={<Product />} />
-          <Route path="/admin" element={<Admin />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/colors" element={<Colors />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/get-a-sample" element={<GetSample />} />
+          <Route path="/about" element={<About />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
-      <footer className="bg-white border-t">
-        <div className="max-w-6xl mx-auto p-4 text-sm text-gray-600">
-          © {new Date().getFullYear()} Memorials Exporter
-        </div>
-      </footer>
+      <Footer />
     </div>
-  )
+  );
 }
