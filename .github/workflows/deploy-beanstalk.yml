@@ -43,7 +43,7 @@ jobs:
           # --- Procfile: bind to the EB-provided port (usually 5000) ---
           # This ensures Tomcat listens where Nginx expects it.
           cat > bundle/Procfile <<'EOF'
-          web: java -Dserver.port=$PORT -jar app.jar
+          web: bash -lc 'java -Dserver.port=${PORT:-5000} -jar app.jar'
           EOF
 
           # normalize line endings just in case
@@ -52,6 +52,11 @@ jobs:
           # include EB health config if present
           [ -f .ebextensions/00-health.config ] && cp .ebextensions/00-health.config bundle/.ebextensions/00-health.config
 
+          # runtime properties so Spring binds to PORT (default 5000 if not set)
+          cat > bundle/application.properties <<'PROPS'
+          server.port=${PORT:5000}
+          PROPS
+          
           # Fail if jar is not executable (no Main-Class)
           if ! unzip -p bundle/app.jar META-INF/MANIFEST.MF | grep -qi '^Main-Class:'; then
             echo "ERROR: app.jar is not executable (no Main-Class in MANIFEST)."
@@ -75,6 +80,8 @@ jobs:
           
           echo "---- Procfile content ----"
           unzip -p deploy.zip Procfile || { echo "ERROR: Cannot read Procfile from zip"; exit 1; }
+          echo "---- application.properties ----"
+          unzip -p deploy.zip application.properties || { echo "ERROR: Cannot read application.properties"; exit 1; }
 
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
