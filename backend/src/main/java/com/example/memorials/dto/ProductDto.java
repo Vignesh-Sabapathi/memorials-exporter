@@ -1,11 +1,12 @@
 package com.example.memorials.dto;
 
+import java.util.List;
+
 public class ProductDto {
     public Long id;
     public String name;
     public String description;
-    public String category;
+    public String sku;
     public Double price;
-    public java.util.List<String> imageKeys;
-    public ProductDto() {}
+    public List<String> imageUrls;
 }
