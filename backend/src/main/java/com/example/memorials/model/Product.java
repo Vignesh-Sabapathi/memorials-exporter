@@ -7,40 +7,66 @@ import java.util.List;
 
 @Entity
 public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     private Long id;
 
     private String name;
 
-    @Column(length = 4000)
-    private String description;
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-    private String category;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSku(String sku) {
+        this.sku = sku;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public void setImageKeys(List<String> imageKeys) {
+        this.imageKeys = imageKeys;
+    }
+
+    private String description;
+    private String sku;
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getSku() {
+        return sku;
+    }
+
+    public List<String> getImageKeys() {
+        return imageKeys;
+    }
 
     private Double price;
 
-    private Instant createdAt = Instant.now();
-
     @ElementCollection
-    @CollectionTable(name = "product_images", joinColumns = @JoinColumn(name = "product_id"))
-    @Column(name = "image_key")
     private List<String> imageKeys = new ArrayList<>();
 
     public Product() {}
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-    public String getCategory() { return category; }
-    public void setCategory(String category) { this.category = category; }
-    public Double getPrice() { return price; }
-    public void setPrice(Double price) { this.price = price; }
-    public Instant getCreatedAt() { return createdAt; }
-    public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
-    public List<String> getImageKeys() { return imageKeys; }
-    public void setImageKeys(List<String> imageKeys) { this.imageKeys = imageKeys; }
 }

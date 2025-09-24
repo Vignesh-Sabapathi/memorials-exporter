@@ -6,6 +6,7 @@ com/example/memorials/controller/AdminController.class
 com/example/memorials/security/AdminTokenFilter$1.class
 com/example/memorials/model/Product.class
 com/example/memorials/storage/StorageService.class
+com/example/memorials/service/S3Service.class
 com/example/memorials/config/CorsConfig.class
 com/example/memorials/security/AdminTokenFilter.class
 com/example/memorials/storage/StorageConfig.class

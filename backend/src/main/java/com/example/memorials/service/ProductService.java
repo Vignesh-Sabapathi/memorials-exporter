@@ -4,52 +4,25 @@ import com.example.memorials.dto.ProductDto;
 import com.example.memorials.model.Product;
 import com.example.memorials.repo.ProductRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
-
     private final ProductRepository repo;
+    private final S3Service s3;
 
-    public ProductService(ProductRepository repo) {
+    public ProductService(ProductRepository repo, S3Service s3) {
         this.repo = repo;
+        this.s3 = s3;
     }
 
     public List<ProductDto> list() {
-        return repo.findAll().stream().map(this::toDto).collect(Collectors.toList());
+        return repo.findAll().stream().map(this::toDto).toList();
     }
 
     public ProductDto get(Long id) {
-        return repo.findById(id).map(this::toDto).orElse(null);
-    }
-
-    @Transactional
-    public ProductDto create(ProductDto dto) {
-        Product p = new Product();
-        apply(p, dto);
-        return toDto(repo.save(p));
-    }
-
-    @Transactional
-    public ProductDto update(Long id, ProductDto dto) {
-        Product p = repo.findById(id).orElseThrow();
-        apply(p, dto);
-        return toDto(repo.save(p));
-    }
-
-    @Transactional
-    public void delete(Long id) {
-        repo.deleteById(id);
-    }
-
-    private void apply(Product p, ProductDto dto) {
-        p.setName(dto.name);
-        p.setDescription(dto.description);
-        p.setCategory(dto.category);
-        p.setPrice(dto.price);
-        p.setImageKeys(dto.imageKeys == null ? java.util.List.of() : dto.imageKeys);
+        return repo.findById(id).map(this::toDto).orElseThrow();
     }
 
     private ProductDto toDto(Product p) {
@@ -57,9 +30,37 @@ public class ProductService {
         dto.id = p.getId();
         dto.name = p.getName();
         dto.description = p.getDescription();
-        dto.category = p.getCategory();
+        dto.sku = p.getSku();
         dto.price = p.getPrice();
-        dto.imageKeys = p.getImageKeys();
+        dto.imageUrls = p.getImageKeys().stream()
+                .map(s3::getPresignedUrl)
+                .toList();
         return dto;
+    }
+
+    public ProductDto create(ProductDto dto) {
+        Product product = new Product();
+        product.setName(dto.name);
+        product.setDescription(dto.description);
+        product.setSku(dto.sku);
+        product.setPrice(dto.price);
+        product.setImageKeys(dto.imageUrls); // or dto.imageKeys
+        product = repo.save(product);
+        return toDto(product);
+    }
+
+    public ProductDto update(Long id, ProductDto dto) {
+        Product product = repo.findById(id).orElseThrow();
+        product.setName(dto.name);
+        product.setDescription(dto.description);
+        product.setSku(dto.sku);
+        product.setPrice(dto.price);
+        product.setImageKeys(dto.imageUrls); // or dto.imageKeys
+        product = repo.save(product);
+        return toDto(product);
+    }
+
+    public void delete(Long id) {
+        repo.deleteById(id);
     }
 }

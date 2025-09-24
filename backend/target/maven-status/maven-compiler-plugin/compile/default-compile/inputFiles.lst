@@ -8,6 +8,7 @@
 /Users/vigneshs/Documents/memorials-exporter/backend/src/main/java/com/example/memorials/repo/ProductRepository.java
 /Users/vigneshs/Documents/memorials-exporter/backend/src/main/java/com/example/memorials/security/SecurityConfig.java
 /Users/vigneshs/Documents/memorials-exporter/backend/src/main/java/com/example/memorials/service/ProductService.java
+/Users/vigneshs/Documents/memorials-exporter/backend/src/main/java/com/example/memorials/service/S3Service.java
 /Users/vigneshs/Documents/memorials-exporter/backend/src/main/java/com/example/memorials/storage/LocalStorageService.java
 /Users/vigneshs/Documents/memorials-exporter/backend/src/main/java/com/example/memorials/storage/S3StorageService.java
 /Users/vigneshs/Documents/memorials-exporter/backend/src/main/java/com/example/memorials/storage/StorageConfig.java
