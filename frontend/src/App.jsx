@@ -11,6 +11,7 @@ import GetSample from "./pages/GetSample";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import About from "./pages/About";
+import Product from "./pages/Product";
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
           <Route path="/get-a-sample" element={<GetSample />} />
           <Route path="/about" element={<About />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/product/:id" element={<Product />} />
         </Routes>
       </main>
       <Footer />

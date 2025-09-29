@@ -15,7 +15,7 @@ export function getClient(adminToken) {
 
 export async function listProducts() {
   const client = getClient()
-  const res = await client.get('/api/products')
+  const res = await client.get('/api/products/all')
   return res.data
 }
 

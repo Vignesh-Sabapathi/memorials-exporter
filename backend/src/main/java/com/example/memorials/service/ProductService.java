@@ -7,6 +7,8 @@ import com.example.memorials.repo.ProductRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
@@ -36,6 +38,12 @@ public class ProductService {
         int limit = limitParam == null ? maxAll : Math.min(limitParam, maxAll);
         List<Product> list = repo.findByIsActiveTrueOrderByCreatedAtDesc(PageRequest.of(0, limit));
         return mapper.toDtos(list);
+    }
+
+    public ProductDto getOne(Long id) {
+        Product p = repo.findByIdAndIsActiveTrue(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found"));
+        return mapper.toDto(p);
     }
 }
 
