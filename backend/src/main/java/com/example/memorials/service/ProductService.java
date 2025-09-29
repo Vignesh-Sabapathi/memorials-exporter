@@ -1,66 +1,41 @@
 package com.example.memorials.service;
 
+
 import com.example.memorials.dto.ProductDto;
 import com.example.memorials.model.Product;
 import com.example.memorials.repo.ProductRepository;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class ProductService {
+
     private final ProductRepository repo;
-    private final S3Service s3;
+    private final ProductMapper mapper;
 
-    public ProductService(ProductRepository repo, S3Service s3) {
+    @Value("${app.products.first-count:15}")
+    private int firstCount;
+
+    @Value("${app.products.max-all:125}")
+    private int maxAll;
+
+    public ProductService(ProductRepository repo, ProductMapper mapper) {
         this.repo = repo;
-        this.s3 = s3;
+        this.mapper = mapper;
     }
 
-    public List<ProductDto> list() {
-        return repo.findAll().stream().map(this::toDto).toList();
+    public List<ProductDto> getFirstProducts() {
+        List<Product> list = repo.findByIsActiveTrueOrderByCreatedAtDesc(PageRequest.of(0, firstCount));
+        return mapper.toDtos(list);
     }
 
-    public ProductDto get(Long id) {
-        return repo.findById(id).map(this::toDto).orElseThrow();
-    }
-
-    private ProductDto toDto(Product p) {
-        ProductDto dto = new ProductDto();
-        dto.id = p.getId();
-        dto.name = p.getName();
-        dto.description = p.getDescription();
-        dto.sku = p.getSku();
-        dto.price = p.getPrice();
-        dto.imageUrls = p.getImageKeys().stream()
-                .map(s3::getPresignedUrl)
-                .toList();
-        return dto;
-    }
-
-    public ProductDto create(ProductDto dto) {
-        Product product = new Product();
-        product.setName(dto.name);
-        product.setDescription(dto.description);
-        product.setSku(dto.sku);
-        product.setPrice(dto.price);
-        product.setImageKeys(dto.imageUrls); // or dto.imageKeys
-        product = repo.save(product);
-        return toDto(product);
-    }
-
-    public ProductDto update(Long id, ProductDto dto) {
-        Product product = repo.findById(id).orElseThrow();
-        product.setName(dto.name);
-        product.setDescription(dto.description);
-        product.setSku(dto.sku);
-        product.setPrice(dto.price);
-        product.setImageKeys(dto.imageUrls); // or dto.imageKeys
-        product = repo.save(product);
-        return toDto(product);
-    }
-
-    public void delete(Long id) {
-        repo.deleteById(id);
+    public List<ProductDto> getAllCapped(Integer limitParam) {
+        int limit = limitParam == null ? maxAll : Math.min(limitParam, maxAll);
+        List<Product> list = repo.findByIsActiveTrueOrderByCreatedAtDesc(PageRequest.of(0, limit));
+        return mapper.toDtos(list);
     }
 }
+
