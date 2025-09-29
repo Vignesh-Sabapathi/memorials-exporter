@@ -4,6 +4,9 @@ import com.example.memorials.model.Product;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Optional;
+
+
 
 import java.util.List;
 
@@ -14,4 +17,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @EntityGraph(attributePaths = {"images"})
     List<Product> findByIsActiveTrueOrderByCreatedAtDesc();
+
+    @EntityGraph(attributePaths = {"images"})
+    Optional<Product> findByIdAndIsActiveTrue(Long id);
 }

@@ -14,7 +14,7 @@ export default function Home(){
         return;
       }
       try{
-        const res = await fetch(API_BASE + "/api/products");
+        const res = await fetch(API_BASE + "/api/products/first");
         if(res.ok){
           const data = await res.json();
           setProducts((Array.isArray(data)?data:[]).slice(0,15));
@@ -141,14 +141,29 @@ export default function Home(){
             <NavLink to="/products" className="btn ghost" style={{borderColor:"var(--border)"}}>View More</NavLink>
           </div>
           <div className="grid five">
-            {products.map(p => (
-              <div className="card-plain" key={p.id || p.sku}>
-                <div className="img-ph" />
-                <h3 style={{margin:"0.5rem 0 0"}}>{p.name}</h3>
-                <p className="muted">{p.sku}</p>
+              {products.map(p => {
+                  const firstImg = (p.imageUrls && p.imageUrls[0]) || "/images/placeholder.jpg";
+                  return (
+                      <NavLink
+                      key={p.id ?? p.sku}
+                      to={p.id ? `/product/${p.id}` : "#"}
+                      className="card-plain"
+                      style={{ textDecoration: "none", color: "inherit" }}
+                      >
+                      <div className="img-ph"
+                      style={{ aspectRatio: "4/3", overflow:"hidden", background:"#f4f4f5" }}>
+                      <img
+                      src={firstImg}
+                      alt={p.name || "Memorial"}
+                      loading="lazy"
+                      style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }}
+                      />
+                      </div>
+                      <h3 style={{margin:"0.5rem 0 0"}}>{p.name}</h3>
+                      </NavLink>
+                      );
+                  })}
               </div>
-            ))}
-          </div>
         </div>
       </section>
 

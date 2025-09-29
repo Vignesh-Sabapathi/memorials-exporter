@@ -1,52 +1,62 @@
 import React, { useEffect, useState } from "react";
-const API_BASE = import.meta?.env?.VITE_API_BASE ?? "";
+import { NavLink } from "react-router-dom";
+import { listProducts } from "../api"; // reuse the axios helper
 
 export default function Products() {
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [items, setItems]   = useState([]);
+  const [loading, setLoad]  = useState(true);
+  const [error, setError]   = useState(null);
 
   useEffect(() => {
     (async () => {
       try {
-        console.log("VITE_API_BASE =", API_BASE || "(empty)");
-        if (!API_BASE) throw new Error("VITE_API_BASE not set");
-        console.log("mode:", import.meta.env.MODE);
-        console.log("VITE_API_BASE:", import.meta.env.VITE_API_BASE);
-        const url = API_BASE.replace(/\/+$/, "") + "/api/products";
-        console.log("Fetching:", url);
-        const res = await fetch(url, {
-          headers: { Accept: "application/json" },
-          credentials: "include",
-        });
-        if (!res.ok) throw new Error(`Failed to load products: ${res.status}`);
-        const data = await res.json();
-        console.log("API data:", data);
+        const data = await listProducts();     // GET /api/products/all
         setItems(Array.isArray(data) ? data : []);
       } catch (e) {
         console.error(e);
-        setError(e.message);
+        setError(e?.message ?? "Failed to load products");
       } finally {
-        setLoading(false);
+        setLoad(false);
       }
     })();
   }, []);
 
   if (loading) return <p>Loading products…</p>;
   if (error)   return <p className="error">Error: {error}</p>;
-  if (items.length === 0) return <p>No products yet.</p>;
+  if (!items.length) return <p>No products yet.</p>;
 
   return (
-    <section className="stack">
-      <h1>Products</h1>
-      <div className="grid three">
-        {items.map((p) => (
-          <div className="card" key={p.id ?? p.sku ?? crypto.randomUUID()}>
-            <div className="img-placeholder" />
-            <h3>{p.name ?? p.title ?? "Untitled"}</h3>
-            {p.sku ? <p className="muted">SKU: {p.sku}</p> : null}
-          </div>
-        ))}
+    <section className="section section--light">
+      <div className="inner stack">
+        <div className="row space-between center-v" style={{flexWrap:"wrap"}}>
+          <h2>Products</h2>
+          <span className="muted">{items.length} items</span>
+        </div>
+
+        {/* Match Home: 5-wide grid, image + title, link to details */}
+        <div className="grid five">
+          {items.map((p) => {
+            const firstImg = (p.imageUrls && p.imageUrls[0]) || "/images/placeholder.jpg";
+            return (
+              <NavLink
+                key={p.id ?? p.sku}
+                to={p.id ? `/product/${p.id}` : "#"}
+                className="card-plain"
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <div className="img-ph" style={{ aspectRatio: "4/3", overflow:"hidden", background:"#f4f4f5" }}>
+                  <img
+                    src={firstImg}
+                    alt={p.name || "Memorial"}
+                    loading="lazy"
+                    style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }}
+                  />
+                </div>
+                <h3 style={{margin:"0.5rem 0 0"}}>{p.name ?? "Untitled"}</h3>
+              </NavLink>
+            );
+          })}
+        </div>
       </div>
     </section>
   );

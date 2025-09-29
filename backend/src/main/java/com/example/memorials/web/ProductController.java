@@ -5,6 +5,7 @@ import com.example.memorials.dto.ProductDto;
 import com.example.memorials.service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -30,6 +31,11 @@ public class ProductController {
     public ResponseEntity<List<ProductDto>> all(
             @RequestParam(value = "limit", required = false) Integer limit) {
         return ResponseEntity.ok(service.getAllCapped(limit));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductDto> getOne(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getOne(id));
     }
 }
 
