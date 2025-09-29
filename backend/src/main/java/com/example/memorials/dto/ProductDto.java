@@ -6,7 +6,7 @@ public class ProductDto {
     public Long id;
     public String name;
     public String description;
-    public String sku;
-    public Double price;
+    public Integer priceCents;
+    public String createdAt;
     public List<String> imageUrls;
 }
