@@ -24,6 +24,8 @@ public class ProductMapper {
     private String buildUrl(String key) {
         if (cdnDomain != null && !cdnDomain.isBlank()) {
             return "https://" + cdnDomain + "/" + key;
+
+
         }
         return "https://" + bucket + ".s3." + region + ".amazonaws.com/" + key;
     }
