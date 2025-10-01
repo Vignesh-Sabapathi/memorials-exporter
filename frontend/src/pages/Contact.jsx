@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { sendUnifiedInquiry } from "../lib/inquiries";
 // If you already use this pattern elsewhere, keep it consistent:
 const API_BASE = import.meta.env?.VITE_API_BASE ?? "";
 
@@ -38,25 +38,17 @@ export default function Contact() {
     setStatus({ state: "submitting", msg: "" });
 
     try {
-      // If you have a backend endpoint:
-      if (API_BASE) {
-        const res = await fetch(`${API_BASE}/api/contact`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: form.name.trim(),
-            email: form.email.trim(),
-            phone: form.phone.trim(),
-            subject: form.subject.trim(),
-            message: form.message.trim(),
-          }),
-        });
 
-        if (!res.ok) {
-          const text = await res.text();
-          throw new Error(`Request failed (${res.status})`);
-        }
-      }
+      await sendUnifiedInquiry({
+        fullName: form.name.trim(),
+        firstName: "",
+        lastName: "",
+        email: form.email.trim(),
+        phone: form.phone.trim(),
+        subject: form.subject.trim(),
+        message: form.message.trim(),
+        contactOrSample: "CONTACT",
+      });
 
       setStatus({ state: "success", msg: "Thanks! We’ll get back to you shortly." });
       setForm({ name: "", email: "", phone: "", subject: "", message: "", company: "" });
