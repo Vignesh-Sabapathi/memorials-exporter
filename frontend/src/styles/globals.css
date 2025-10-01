@@ -542,3 +542,100 @@ input.hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 
 @media (max-width: 1024px) {
   .contact-grid { grid-template-columns: 1fr; }
 }
+
+
+
+/* ===== About page extras (namespaced) ===== */
+.about-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.06);
+  padding: clamp(1rem, 2vw, 1.25rem);
+  margin: 1rem 0;
+}
+
+/* Certificates grid: 3 columns on desktop/iPad, 1 column on phones */
+.certs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 12px;
+}
+@media (max-width: 767px) {
+  .certs-grid { grid-template-columns: 1fr; }
+}
+
+.cert-card {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px;
+  cursor: pointer;
+  text-align: left;
+  display: grid;
+  gap: 8px;
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+.cert-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,.08);
+  border-color: rgba(0,0,0,.08);
+}
+
+.cert-media {
+  width: 100%;
+   aspect-ratio: 4 / 6;      /* keep card boxes consistent */
+   background: #fff;
+   border: 1px solid var(--border);
+   border-radius: 10px;
+   overflow: hidden;
+   display: grid;
+   place-items: center;
+}
+.cert-img {
+  width: 100%;
+   height: 100%;
+   object-fit: contain;      /* <<< was 'cover' → change to 'contain' */
+   display: block;
+   background: #fff;
+}
+.cert-meta { font-size: .95rem; }
+
+/* Lightbox */
+.cert-lightbox-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.6);
+  display: grid; place-items: center;
+  z-index: 999;
+  padding: 20px;
+}
+.cert-lightbox {
+  width: min(980px, 96vw);
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.cert-lightbox-head {
+  padding: 12px 14px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+.cert-lightbox-body {
+  padding: 14px;
+  display: grid; place-items: center;
+}
+.cert-lightbox-img {
+  width: 100%; height: auto;
+  max-height: min(84vh, 1000px);
+  object-fit: contain;            /* no crop in preview */
+  display: block;
+  background: #fff;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .cert-card { transition: none; }
+}

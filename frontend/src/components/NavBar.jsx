@@ -45,6 +45,7 @@ export default function NavBar() {
             <NavLink to="/products" className={linkClass} onClick={close}>Products</NavLink>
             <NavLink to="/colors" className={linkClass} onClick={close}>Colors</NavLink>
             <NavLink to="/contact" className={linkClass} onClick={close}>Contact</NavLink>
+            <NavLink to="/about" className={linkClass} onClick={close}>About Us</NavLink>
             <NavLink to="/get-a-sample" className={linkClass} onClick={close}>Get a Sample</NavLink>
           </nav>
 
