@@ -3,9 +3,9 @@ import { NavLink } from "react-router-dom";
 
 // Put your certificate images into /public/images/certs/…
 const CERTS = [
-  { key: "cert-iso9001",  name: "ISO 9001",  src: "/images/JK_CAPEXIL.jpg" },
-  { key: "cert-iso14001", name: "ISO 14001", src: "/images/JK_UDYAM.jpg" },
-  { key: "cert-sedex",    name: "SEDEX",     src: "/images/JKIECCode.jpeg" },
+  { key: "cert-capexil",  name: "CAPEXIL",  src: "/images/JK_CAPEXIL.jpg" },
+  { key: "cert-UDYAM", name: "UDYAM", src: "/images/JK_UDYAM.jpg" },
+  { key: "cert-IEC",    name: "IEC Code",     src: "/images/JKIECCode.jpeg" },
 ];
 
 export default function About() {

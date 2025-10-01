@@ -1,66 +1,128 @@
 import React, { useState } from "react";
 
-const API_BASE = import.meta?.env?.VITE_API_BASE ?? "";
-
 export default function GetSample() {
   const [form, setForm] = useState({
-    name: "", email: "", phone: "", address: "", color: "", notes: ""
+    firstName: "",
+    lastName: "",
+    email: "",
+    address: "",
+    mobile: "",
   });
-  const [status, setStatus] = useState(null);
 
-  const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setForm(prev => ({ ...prev, [name]: value }));
+  }
 
-  async function onSubmit(e) {
+  function handleSubmit(e) {
     e.preventDefault();
-    try {
-      if (API_BASE) {
-        const res = await fetch(API_BASE + "/api/samples", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(form),
-        });
-        if (!res.ok) throw new Error("Failed to request sample");
-      }
-      setStatus("Sample request submitted. We’ll confirm by email.");
-      setForm({ name: "", email: "", phone: "", address: "", color: "", notes: "" });
-    } catch (err) {
-      setStatus("Error: " + err.message);
-    }
+    // hook your API here
+    console.log("Sample request:", form);
+    alert("Thanks! We’ve recorded your request.");
   }
 
   return (
-    <section className="stack">
-      <h1>Get a Sample</h1>
-      <form className="card form" onSubmit={onSubmit}>
-        <div className="grid two">
-          <label>
-            Name
-            <input name="name" value={form.name} onChange={onChange} required />
-          </label>
-          <label>
-            Email
-            <input type="email" name="email" value={form.email} onChange={onChange} required />
-          </label>
-          <label>
-            Phone
-            <input name="phone" value={form.phone} onChange={onChange} />
-          </label>
-          <label>
-            Preferred Color
-            <input name="color" value={form.color} onChange={onChange} />
-          </label>
-        </div>
-        <label>
-          Address
-          <textarea name="address" rows="3" value={form.address} onChange={onChange} required />
-        </label>
-        <label>
-          Notes
-          <textarea name="notes" rows="3" value={form.notes} onChange={onChange} />
-        </label>
-        <button type="submit">Request Sample</button>
-        {status && <p className="muted">{status}</p>}
-      </form>
-    </section>
+    <main className="gs-wrap">
+      <section className="gs-card gs-left">
+        <h1 className="gs-title">Get a Sample</h1>
+        <p className="gs-subtitle">
+          Here’s exactly what happens after you submit the form:
+        </p>
+
+        <ol className="gs-steps">
+          <li>
+            You’ll receive a confirmation email with the details of your sample
+            request.
+          </li>
+          <li>
+            Our team will process your request promptly, and your sample will be
+            shipped within 5–7 business days.
+          </li>
+          <li>
+            A dedicated account manager will be available to answer any
+            questions.
+          </li>
+        </ol>
+      </section>
+
+      <section className="gs-card gs-right">
+        <h2 className="gs-form-title">Your Details</h2>
+
+        <form className="gs-form" onSubmit={handleSubmit} noValidate>
+          <div className="gs-row">
+            <div className="gs-field">
+              <label htmlFor="firstName">First Name</label>
+              <input
+                id="firstName"
+                name="firstName"
+                type="text"
+                autoComplete="given-name"
+                placeholder="John"
+                required
+                value={form.firstName}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="gs-field">
+              <label htmlFor="lastName">Last Name</label>
+              <input
+                id="lastName"
+                name="lastName"
+                type="text"
+                autoComplete="family-name"
+                placeholder="Doe"
+                required
+                value={form.lastName}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+
+          <div className="gs-field">
+            <label htmlFor="email">Email</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              placeholder="you@example.com"
+              required
+              value={form.email}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="gs-field">
+            <label htmlFor="address">Address</label>
+            <textarea
+              id="address"
+              name="address"
+              rows="3"
+              placeholder="House/Flat, Street, City, Postcode"
+              required
+              value={form.address}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="gs-field">
+            <label htmlFor="mobile">Mobile Number</label>
+            <input
+              id="mobile"
+              name="mobile"
+              type="tel"
+              autoComplete="tel"
+              placeholder="+44 7xxxx xxxxx"
+              required
+              value={form.mobile}
+              onChange={handleChange}
+            />
+          </div>
+
+          <button type="submit" className="gs-btn">Request Sample</button>
+        </form>
+      </section>
+    </main>
   );
 }
