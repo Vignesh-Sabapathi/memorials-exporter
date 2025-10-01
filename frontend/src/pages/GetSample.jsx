@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { sendUnifiedInquiry } from "../lib/inquiries";
 
 export default function GetSample() {
   const [form, setForm] = useState({
@@ -16,9 +17,25 @@ export default function GetSample() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    // hook your API here
-    console.log("Sample request:", form);
-    alert("Thanks! We’ve recorded your request.");
+    const fullName = `${form.firstName ?? ""} ${form.lastName ?? ""}`.trim();
+    sendUnifiedInquiry({
+        fullName,
+        firstName: form.firstName,
+        lastName: form.lastName,
+        email: form.email,
+        phone: form.mobile,
+        subject: "SAMPLE_REQUEST",
+        message: form.address,
+        contactOrSample: "SAMPLE",
+    })
+    .then(() => {
+      alert("Thanks! We’ve recorded your request.");
+      setForm({ firstName: "", lastName: "", email: "", address: "", mobile: "" });
+      })
+    .catch((err) => {
+        console.error(err);
+        alert("Something went wrong. Please try again.");
+    });
   }
 
   return (
