@@ -4,6 +4,18 @@ import { NavLink } from "react-router-dom";
 
 const API_BASE = import.meta.env?.VITE_API_BASE ?? "";
 
+const COLOR_IMAGES = [
+    "/images/Indian-Black.jpg",
+    "/images/Bahama-Blue.jpg",
+    "/images/Indian-Sadarali-Grey.jpeg",
+    "/images/Ruby-Red.jpg",
+    "/images/Tropical-Green.jpg",
+    "/images/Cats-Eye.jpg",
+    "/images/Black-Forest.jpg",
+    "/images/Blue-Pearl.jpeg",
+    "/images/Indian-Aurora.jpeg",
+  ];
+
 export default function Home(){
   const [products, setProducts] = useState([]);
 
@@ -44,6 +56,21 @@ export default function Home(){
     steps.forEach((el) => obs.observe(el));
     return () => obs.disconnect();
   }, []);
+
+  const n = COLOR_IMAGES.length;
+  const [idx, setIdx] = React.useState(0);
+  const go = (d) => setIdx((i) => (i + d + n) % n);
+
+  // swipe support (mobile)
+  const startX = React.useRef(null);
+  const onTouchStart = (e) => (startX.current = e.touches[0].clientX);
+  const onTouchEnd = (e) => {
+      if (startX.current == null) return;
+      const dx = e.changedTouches[0].clientX - startX.current;
+      if (Math.abs(dx) > 40) go(dx < 0 ? +1 : -1);
+      startX.current = null;
+  };
+
 
   return (
     <section className="stack" style={{gap:0}}>
@@ -150,14 +177,33 @@ export default function Home(){
                       className="card-plain"
                       style={{ textDecoration: "none", color: "inherit" }}
                       >
-                      <div className="img-ph"
-                      style={{ aspectRatio: "4/3", overflow:"hidden", background:"#f4f4f5" }}>
-                      <img
-                      src={firstImg}
-                      alt={p.name || "Memorial"}
-                      loading="lazy"
-                      style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }}
-                      />
+                      <div
+                        style={{
+                          width: "100%",
+                          aspectRatio: "1 / 1",            // or "1 / 1" if you prefer square cards
+                          background: "#fff",
+                          border: "1px solid var(--border)",
+                          borderRadius: "12px",
+                          overflow: "hidden",
+                          display: "grid",
+                          placeItems: "center",
+                        }}
+                      >
+                        <img
+                          src={firstImg}
+                          alt={p.name || "Memorial"}
+                          loading="lazy"
+                          style={{
+                            maxWidth: "100%",
+                            maxHeight: "100%",
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "contain",          // <-- key: no cropping
+                            objectPosition: "center",
+                            display: "block",
+                            background: "#fff",
+                          }}
+                        />
                       </div>
                       <h3 style={{margin:"0.5rem 0 0"}}>{p.name}</h3>
                       </NavLink>
@@ -169,11 +215,37 @@ export default function Home(){
 
       {/* 5) COLORS (empty) */}
       <section className="section section--muted vh70">
-        <div className="inner stack" style={{justifyItems:"center", textAlign:"center"}}>
-          <h2>Granite Colors</h2>
-          <p className="muted">We’ll showcase swatches and finishes here shortly…</p>
-        </div>
-      </section>
+            <div className="inner stack" style={{ justifyItems: "center", textAlign: "center", height: "100%" }}>
+              <h2 className="heading" style={{ marginBottom: ".25rem" }}>
+                  <br></br>
+                Granite Colors
+              </h2>
+
+              {/* Desktop/Tablet: Grid gallery (your design) */}
+              <div className="gc-container hide-on-mobile">
+                <div className="gc-gallery">
+                  {COLOR_IMAGES.map((src, i) => (
+                    <div key={i} className="gc-item">
+                      <img className="gc-image" src={src} alt={`Granite color ${i + 1}`} loading="lazy" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Mobile: single-image slider with left/right buttons */}
+              <div
+                className="gc-mobile-slider show-on-mobile"
+                onTouchStart={onTouchStart}
+                onTouchEnd={onTouchEnd}
+              >
+                <button className="gc-nav gc-left" aria-label="Previous color" onClick={() => go(-1)}>‹</button>
+                <div className="gc-frame">
+                  <img src={COLOR_IMAGES[idx]} alt={`Granite color ${idx + 1} of ${n}`} className="gc-img" />
+                </div>
+                <button className="gc-nav gc-right" aria-label="Next color" onClick={() => go(+1)}>›</button>
+              </div>
+            </div>
+          </section>
 
       {/* 6) TESTIMONIALS */}
       <section className="section section--light vh70">
