@@ -44,12 +44,32 @@ export default function Products() {
                 className="card-plain"
                 style={{ textDecoration: "none", color: "inherit" }}
               >
-                <div className="img-ph" style={{ aspectRatio: "4/3", overflow:"hidden", background:"#f4f4f5" }}>
+                <div
+                  style={{
+                    width: "100%",
+                    aspectRatio: "1 / 1",            // or "1 / 1" if you prefer square cards
+                    background: "#fff",
+                    border: "1px solid var(--border)",
+                    borderRadius: "12px",
+                    overflow: "hidden",
+                    display: "grid",
+                    placeItems: "center",
+                  }}
+                >
                   <img
                     src={firstImg}
                     alt={p.name || "Memorial"}
                     loading="lazy"
-                    style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }}
+                    style={{
+                      maxWidth: "100%",
+                      maxHeight: "100%",
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "contain",          // <-- key: no cropping
+                      objectPosition: "center",
+                      display: "block",
+                      background: "#fff",
+                    }}
                   />
                 </div>
                 <h3 style={{margin:"0.5rem 0 0"}}>{p.name ?? "Untitled"}</h3>

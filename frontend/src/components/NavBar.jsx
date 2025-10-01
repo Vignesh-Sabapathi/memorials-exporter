@@ -24,18 +24,28 @@ export default function NavBar() {
       <div className="container">
         <div className="nav-inner">
           <NavLink to="/" className="brand" onClick={close}>
-            <img src={logo} alt="" className="logo" />
-            <span>JK Granites</span>
+            <img
+              src={logo}
+              alt="JK Granites Logo"
+              className="logo"
+              style={{ height: "40px", width: "auto" }}  // adjust height
+            />
+            <span style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: "1.8rem",
+              fontWeight: 900,
+              letterSpacing: "0.5px"
+            }}>
+              JK Granites
+            </span>
           </NavLink>
 
           <nav className={"nav-menu " + (open ? "open" : "")} id="site-menu">
             <NavLink to="/" className={linkClass} onClick={close} end>Home</NavLink>
             <NavLink to="/products" className={linkClass} onClick={close}>Products</NavLink>
             <NavLink to="/colors" className={linkClass} onClick={close}>Colors</NavLink>
-            <NavLink to="/faq" className={linkClass} onClick={close}>FAQ</NavLink>
             <NavLink to="/contact" className={linkClass} onClick={close}>Contact</NavLink>
             <NavLink to="/get-a-sample" className={linkClass} onClick={close}>Get a Sample</NavLink>
-            <NavLink to="/admin" className={linkClass} onClick={close}>Admin</NavLink>
           </nav>
 
           <button
