@@ -778,3 +778,128 @@ body{background:var(--gs-bg); color:var(--gs-text);}
   .gs-left, .gs-right{ flex: 1 1 auto; }
   .gs-row{ grid-template-columns: 1fr; }
 }
+
+
+/* No :root here — we use your existing globals */
+
+.footer.section--dark{
+  /* override variables just within the footer */
+  --surface: #0f1115;
+  --text:    #e9ecf1;
+  --muted:   #9aa2b1;
+  --border:  #1b1f2a;
+  --accent:  #3b82f6;
+
+  background: var(--surface);
+  color: var(--text);
+}
+.footer {
+  color: var(--text); /* default for all text inside footer */
+}
+
+.footer strong {
+  color: var(--text); /* brighten section headings */
+  font-weight: 600;
+}
+
+.footer .links a {
+  color: var(--text);
+  text-decoration: none;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+.footer .links a:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* keep muted for *only* subtle notes */
+.footer .muted {
+  color: var(--muted);
+}
+
+.footer.section--dark{
+  background: var(--surface, #0b0c0f);
+  color: var(--text, #e9ecf1);
+}
+
+/* Container */
+.footer-inner{
+  width: min(1100px, 92%);
+  margin: 0 auto;
+  padding: 28px 0;
+}
+
+/* 3-column grid on desktop */
+.footer-grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(14px, 2.5vw, 28px);
+}
+
+/* Stack order preserved on mobile (left → middle → right) */
+@media (max-width: 820px){
+  .footer-grid{
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Simple vertical stacks */
+.stack{
+  display: grid;
+  gap: 10px;
+}
+
+/* Brand row */
+.brand{
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+.brand-square{
+  width: 40px;
+  height: 40px;
+  background: var(--accent, #3b82f6);
+  border-radius: 6px;
+}
+
+/* Links list */
+.links{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: .35rem;
+}
+.links a{
+  color: var(--text, #e9ecf1);
+  text-decoration: none;
+  opacity: .95;
+}
+.links a:hover{
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* Muted text + button */
+.muted{ color: var(--muted, #9aa2b1); }
+
+.btn{
+  display: inline-block;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--accent, #3b82f6);
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* Bottom border row */
+.bottom-bar{
+  margin-top: 1rem;
+  border-top: 1px solid var(--border, #1b1f2a);
+  padding-top: .75rem;
+  color: var(--muted, #9aa2b1);
+  font-size: .95rem;
+}
