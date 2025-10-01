@@ -46,17 +46,6 @@ export default function Product() {
         {/* Right: product info */}
         <div>
           <h1 className="text-2xl font-bold mb-2">{p.name}</h1>
-          {p.priceCents != null && (
-            <div className="text-xl font-semibold mb-4">
-              £{(p.priceCents / 100).toFixed(2)}
-            </div>
-          )}
-          <p className="text-gray-700 whitespace-pre-wrap">{p.description}</p>
-
-          {p.sku && <div className="mt-4 text-sm text-gray-600">SKU: {p.sku}</div>}
-          {p.category && (
-            <div className="mt-2 text-sm text-gray-600">Category: {p.category}</div>
-          )}
         </div>
       </div>
     </div>

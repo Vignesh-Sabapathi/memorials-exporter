@@ -247,60 +247,6 @@ export default function Home(){
             </div>
           </section>
 
-      {/* 6) TESTIMONIALS */}
-      <section className="section section--light vh70">
-        <div className="inner">
-          <h2 style={{textAlign:"center"}}>Testimonials</h2>
-          <div className="grid three" style={{gridTemplateColumns:"repeat(3,1fr)"}}>
-            <blockquote style={{margin:0,borderLeft:"4px solid var(--accent)",padding:".75rem 1rem",background:"#fff"}}>
-              <p>“Consistent finish and on-time deliveries. Great partner.”</p>
-              <footer>— UK Memorials Ltd.</footer>
-            </blockquote>
-            <blockquote style={{margin:0,borderLeft:"4px solid var(--accent)",padding:".75rem 1rem",background:"#fff"}}>
-              <p>“Clear communication and safe packing. Zero breakages.”</p>
-              <footer>— NorthShire Monuments</footer>
-            </blockquote>
-            <blockquote style={{margin:0,borderLeft:"4px solid var(--accent)",padding:".75rem 1rem",background:"#fff"}}>
-              <p>“Flexible with custom sizes and sandblasting.”</p>
-              <footer>— Heritage Stones</footer>
-            </blockquote>
-          </div>
-        </div>
-      </section>
-
-      {/* 7) FINAL: logo + links + contact */}
-      <section className="section section--dark vh70">
-        <div className="inner">
-          <div className="grid three" style={{gridTemplateColumns:"repeat(3,1fr)"}}>
-            <div className="stack">
-              <div style={{display:"flex",alignItems:"center",gap:".6rem"}}>
-                <div style={{width:"40px",height:"40px",background:"var(--accent)"}} />
-                <strong>Memorials Exporter</strong>
-              </div>
-              <p className="muted">Trusted granite memorials exporter.</p>
-            </div>
-            <div className="stack">
-              <strong>Useful Links</strong>
-              <ul style={{listStyle:"none",margin:0,padding:0,display:"grid",gap:".35rem"}}>
-                <li><NavLink to="/">Home</NavLink></li>
-                <li><NavLink to="/products">Products</NavLink></li>
-                <li><NavLink to="/colors">Colors</NavLink></li>
-                <li><NavLink to="/faq">FAQ</NavLink></li>
-                <li><NavLink to="/contact">Contact</NavLink></li>
-              </ul>
-            </div>
-            <div className="stack">
-              <strong>Contact</strong>
-              <p className="muted">Email: info@example.com<br/>Phone: +44 0000 000000<br/>Address: Glasgow, UK</p>
-              <NavLink to="/contact" className="btn">Book meeting</NavLink>
-            </div>
-          </div>
-          <div style={{marginTop:"1rem",borderTop:"1px solid var(--border)",paddingTop:".75rem",color:"var(--muted)"}}>
-            © {new Date().getFullYear()} Memorials Exporter — All rights reserved.
-          </div>
-        </div>
-      </section>
-
     </section>
   );
 }
